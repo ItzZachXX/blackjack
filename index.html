@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-felt="teal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Natural 21</title>
+  <meta name="description" content="Casino blackjack in your browser with real table rules you can set, a basic strategy coach, card counting practice, pass and play, and online tables. Play chips only.">
+  <meta name="theme-color" content="#0e1014">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" id="brandBtn" aria-label="Natural 21 home">
+      <span class="brand-mark" id="brandMark"></span>
+      <span class="brand-name">Natural 21</span>
+    </button>
+    <nav class="topnav">
+      <button class="nav-btn" id="navPlay" data-icon="home"><span>Play</span></button>
+      <button class="nav-btn" id="navRules" data-icon="book"><span>Rules</span></button>
+      <button class="nav-btn icon-only" id="navTheme" aria-label="Toggle light or dark mode"></button>
+      <button class="nav-btn icon-only" id="navSettings" aria-label="Settings" data-icon="gear"></button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="view">
+      <div class="hero">
+        <p class="eyebrow">Blackjack, fully enforced</p>
+        <h1>Beat the dealer.<br><span>Learn the math.</span></h1>
+        <p class="lede">Real casino rules you can set yourself, from 6 to 5 single deck to Las Vegas Strip. The coach teaches basic strategy as you play, and the count tracker shows card counting points in real time.</p>
+      </div>
+      <div id="resumeSlot"></div>
+      <div class="mode-grid">
+        <button class="mode-card" data-mode="solo">
+          <span class="mode-icon" data-icon="cpu"></span>
+          <span class="mode-title">Solo vs Dealer</span>
+          <span class="mode-desc">Play up to three hands at once. Your chips are saved on this device.</span>
+          <span class="mode-tag">Offline</span>
+        </button>
+        <button class="mode-card" data-mode="local">
+          <span class="mode-icon" data-icon="users"></span>
+          <span class="mode-title">Pass &amp; Play</span>
+          <span class="mode-desc">Up to five players at one table on this device, each with their own chips.</span>
+          <span class="mode-tag">Offline</span>
+        </button>
+        <button class="mode-card" data-mode="online">
+          <span class="mode-icon" data-icon="globe"></span>
+          <span class="mode-title">Play Online</span>
+          <span class="mode-desc">Open a table and send the link. Up to four friends play against the same dealer.</span>
+          <span class="mode-tag accent">Invite link</span>
+        </button>
+      </div>
+      <div class="rules-strip">
+        <div>
+          <h2>Payouts and points</h2>
+          <p>Chips are your points. In the count tracker, low cards (2 to 6) are worth +1, middle cards (7 to 9) are 0, and tens and aces are -1. A high count favours the player.</p>
+        </div>
+        <div class="pay-grid">
+          <div><b>3 : 2</b><span>Blackjack</span></div>
+          <div><b>1 : 1</b><span>Win</span></div>
+          <div><b>2 : 1</b><span>Insurance</span></div>
+          <div><b>Half</b><span>Surrender</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="game" class="view hidden">
+      <div class="bj-layout">
+        <div class="table-col">
+          <div class="status" id="status"></div>
+          <div class="bj-table" id="bjTable">
+            <div class="bj-felt">
+              <svg class="felt-print" viewBox="0 0 1000 588" preserveAspectRatio="none" aria-hidden="true">
+                <path id="arcTop" d="M150 238 Q500 400 850 238" fill="none"/>
+                <path id="arcLow" d="M230 282 Q500 410 770 282" fill="none"/>
+                <path class="arc" d="M90 200 Q500 400 910 200"/>
+                <text font-size="24" text-anchor="middle"><textPath href="#arcTop" startOffset="50%" id="printPay">BLACKJACK PAYS 3 TO 2</textPath></text>
+                <text font-size="17" text-anchor="middle"><textPath href="#arcLow" startOffset="50%" id="printRule">DEALER MUST STAND ON ALL 17s</textPath></text>
+              </svg>
+            </div>
+            <div class="count-chip hidden" id="countChip"></div>
+            <div class="shoe" id="shoe"></div>
+            <div class="dealer-zone">
+              <span class="lbl">Dealer <span class="badge hidden" id="dealerTotal"></span></span>
+              <div class="cards-row" id="dealerCards"></div>
+            </div>
+            <div id="spots"></div>
+          </div>
+          <div class="controls" id="controls"></div>
+        </div>
+
+        <aside class="side">
+          <div class="offer hidden" id="offerBox"></div>
+          <div class="hint-card">
+            <div class="hint-head">
+              <span class="hint-title"><span data-icon="bulb"></span>Coach</span>
+              <span class="hint-count" id="hintCount"></span>
+            </div>
+            <div class="hint-body" id="hintBody"></div>
+            <button class="btn primary block" id="hintBtn"><span data-icon="bulb"></span><span>Ask the coach</span></button>
+          </div>
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="points" role="tab">Points</button>
+            <button class="tab" data-tab="count" role="tab">Count</button>
+            <button class="tab" data-tab="history" role="tab">History</button>
+            <button class="tab hidden" data-tab="chat" role="tab" id="chatTab">Chat<span class="dot hidden" id="chatDot"></span></button>
+          </div>
+          <div class="tab-panels">
+            <div class="panel" data-panel="points"><div id="pointsPanel"></div></div>
+            <div class="panel hidden" data-panel="count"><div id="countPanel"></div></div>
+            <div class="panel hidden" data-panel="history"><div class="hist" id="histList"></div></div>
+            <div class="panel hidden" data-panel="chat">
+              <div class="chat-log" id="chatLog"></div>
+              <form class="chat-form" id="chatForm" autocomplete="off">
+                <input id="chatInput" maxlength="200" placeholder="Message the table">
+                <button class="icon-btn" aria-label="Send" data-icon="send"></button>
+              </form>
+            </div>
+          </div>
+          <div class="toolbar secondary">
+            <button class="tool" id="newBtn" data-icon="plus"><span>New game</span></button>
+            <button class="tool" id="resetBtn" data-icon="refresh"><span>Reset chips</span></button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot"><a href="https://4fdr.dev">Made by 4FDR Studios</a></footer>
+
+  <div class="modal-back hidden" id="modalBack">
+    <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+  </div>
+  <div class="toasts" id="toasts"></div>
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" defer></script>
+  <script src="rules.js"></script>
+  <script src="art.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

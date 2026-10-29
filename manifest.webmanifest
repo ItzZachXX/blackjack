@@ -1,0 +1,11 @@
+{
+  "name": "Natural 21",
+  "short_name": "Natural 21",
+  "description": "Casino blackjack with real table rules, a basic strategy coach, card counting practice, pass and play, and online tables. Play chips only.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e1014",
+  "theme_color": "#0e1014",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
